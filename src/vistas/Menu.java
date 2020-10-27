@@ -17,11 +17,11 @@ public class Menu extends MenuTemplate {
 
 	AlumnoServicio alumnoServicio;
 	ArchivosServicio archivoServicio;
-	Scanner scanner;
-	List<Alumno> alumnos;
-	Utilidad util = new Utilidad();
+	static Scanner scanner = new Scanner(System.in);
+	static List<Alumno> alumnos = new ArrayList<Alumno>();
+	static Utilidad util = new Utilidad();
 
-	private void cargarDatos() {
+	public static void cargarDatos() {
 
 		String filename = "C:\\Users\\moned\\eclipse-workspace\\Prueba-Java\\src\\datos\\notas.csv";
 		ArchivosServicio datos = new ArchivosServicio();
@@ -30,7 +30,7 @@ public class Menu extends MenuTemplate {
 
 	}
 
-	private void exportarDatos() {
+	public static void exportarDatos() {
 
 		FileWriter archivo = null;
 		PrintWriter pw = null;
@@ -52,7 +52,7 @@ public class Menu extends MenuTemplate {
 
 	}
 
-	public void crearAlummno() {
+	public static void crearAlummno() {
 
 		List<Materia> materia = new ArrayList<Materia>();
 		System.out.println("Ingresa rut: ");
@@ -69,7 +69,7 @@ public class Menu extends MenuTemplate {
 
 	}
 
-	private void agregarMateria() {
+	public static void agregarMateria() {
 
 		boolean res = false;
 		String rut;
@@ -78,30 +78,29 @@ public class Menu extends MenuTemplate {
 			rut = scanner.nextLine();
 			if (validarRut(rut)) {
 				res = true;
-			}else {
+			} else {
 				System.out.println("Rut incorrecto");
 			}
 		} while (res == false);
 		String r = rut;
 		do {
-			System.out.println("Seleccione numero de materia: "
-					+ "\n1. MATEMATICA\n2. LENGUAJE\n3. CIENCIA\n4. HISTORIA");
+			System.out.println(
+					"Seleccione numero de materia: " + "\n1. MATEMATICA\n2. LENGUAJE\n3. CIENCIA\n4. HISTORIA");
 			String materia = scanner.nextLine();
-			if (Integer.parseInt(materia) <0 || Integer.parseInt(materia) >4) {
+			if (Integer.parseInt(materia) > 0 || Integer.parseInt(materia) < 4) {
 				Alumno al = (Alumno) alumnos.stream().filter(e -> e.getRut() == r);
 				al.getMaterias().add(new Materia(util.devolverMateriaInt((Integer.parseInt(materia)))));
 				res = true;
-			}else {
+			} else {
 				System.out.println("Opcion incorrecta");
 			}
 		} while (res == false);
-		
-		System.out.println("Materia agregada");
 
+		System.out.println("Materia agregada");
 
 	}
 
-	private boolean validarRut(String rut) {
+	public static boolean validarRut(String rut) {
 		// TODO Auto-generated method stub
 		for (Alumno a : alumnos) {
 			if (a.getRut().equals(rut)) {
@@ -111,8 +110,8 @@ public class Menu extends MenuTemplate {
 		return false;
 	}
 
-	private void agregarNotaPasoUno() {
-		
+	public static void agregarNotaPasoUno() {
+
 		boolean res = false;
 		String rut;
 		do {
@@ -120,35 +119,46 @@ public class Menu extends MenuTemplate {
 			rut = scanner.nextLine();
 			if (validarRut(rut)) {
 				res = true;
-			}else {
+			} else {
 				System.out.println("Rut incorrecto");
 			}
 		} while (res == false);
 		String r = rut;
 		do {
+			int i = 0;
 			System.out.println("Alumno tiene las siguientes materias: ");
 			Alumno al = (Alumno) alumnos.stream().filter(e -> e.getRut() == r);
-			
-			System.out.println("Seleccione numero de materia: "
-					+ "\n1. MATEMATICA\n2. LENGUAJE\n3. CIENCIA\n4. HISTORIA");
+			for (Materia e : al.getMaterias()) {
+				System.out.println((i++) + ". " + e.getNombre());
+			}
+			System.out.println("Seleccione numero de materia: ");
 			String materia = scanner.nextLine();
-			if (Integer.parseInt(materia) <0 || Integer.parseInt(materia) >4) {
-				
-				al.getMaterias().add(new Materia(util.devolverMateriaInt((Integer.parseInt(materia)))));
+			if (Integer.parseInt(materia) < 1 || Integer.parseInt(materia) > al.getMaterias().size()) {
+				System.out.println("Ingrese nota");
+				String nota = scanner.nextLine();
+				al.getMaterias().get(Integer.parseInt(materia) - 1).getNotas().add(nota);
 				res = true;
-			}else {
+			} else {
 				System.out.println("Opcion incorrecta");
 			}
 		} while (res == false);
-		
-		System.out.println("Materia agregada");
 
-		
+		System.out.println("Materia agregada");
 
 	}
 
-	private void listarAlummnos() {
+	public static void listarAlummnos() {
 
+		for (Alumno e : alumnos) {
+			System.out.println("Rut: " + e.getRut() + "\nNombre: " + e.getNombre() + "" + "\nApellido: "
+					+ e.getApellido() + "\nDireccion: " + e.getDireccion());
+			for (Materia m : e.getMaterias()) {
+				System.out.println(m.getNombre());
+
+				m.getNotas().forEach(System.out::println);
+			}
+		}
+		scanner.nextLine();
 	}
 
 }
