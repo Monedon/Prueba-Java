@@ -1,5 +1,10 @@
 package modelo;
 
-public class MateriaEnum {
+public enum MateriaEnum {
+	
+		MATEMATICAS,
+		LENGUAJE,
+		CIENCIA,
+		HISTORIA
 
 }
