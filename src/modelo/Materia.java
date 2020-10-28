@@ -17,7 +17,6 @@ public class Materia {
 	public Materia(MateriaEnum nombre) {
 		super();
 		this.nombre = nombre;
-		this.notas = new ArrayList<String>();
 	}
 
 	public MateriaEnum getNombre() {

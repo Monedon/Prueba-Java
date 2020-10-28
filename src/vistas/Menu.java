@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import modelo.Alumno;
 import modelo.Materia;
+import modelo.MateriaEnum;
 import servicios.AlumnoServicio;
 import servicios.ArchivosServicio;
 import utilidades.Utilidad;
@@ -39,10 +41,10 @@ public class Menu extends MenuTemplate {
 
 			archivo = new FileWriter("Salida", true);
 			pw = new PrintWriter(archivo);
-			int i;
-			// for (i = 0; i < numeros.size(); i++) {
-			// pw.print(numeros.get(i) + ",");
-			// }
+			for(Alumno e : alumnos) {
+				
+				pw.println(e);
+			}
 			pw.close();
 			archivo.close();
 
@@ -87,9 +89,12 @@ public class Menu extends MenuTemplate {
 			System.out.println(
 					"Seleccione numero de materia: " + "\n1. MATEMATICA\n2. LENGUAJE\n3. CIENCIA\n4. HISTORIA");
 			String materia = scanner.nextLine();
+			Materia ramo ;
 			if (Integer.parseInt(materia) > 0 || Integer.parseInt(materia) < 4) {
-				Alumno al = (Alumno) alumnos.stream().filter(e -> e.getRut() == r);
-				al.getMaterias().add(new Materia(util.devolverMateriaInt((Integer.parseInt(materia)))));
+				System.out.println("entró a agregar materia");
+				ramo = new Materia(util.devolverMateriaInt(Integer.parseInt(materia)));
+				alumnos.stream().filter(e -> e.getRut().equals(r))
+				.map(e->e.getMaterias().add(ramo)).collect(Collectors.toList());
 				res = true;
 			} else {
 				System.out.println("Opcion incorrecta");
@@ -127,16 +132,16 @@ public class Menu extends MenuTemplate {
 		do {
 			int i = 0;
 			System.out.println("Alumno tiene las siguientes materias: ");
-			Alumno al = (Alumno) alumnos.stream().filter(e -> e.getRut() == r);
-			for (Materia e : al.getMaterias()) {
-				System.out.println((i++) + ". " + e.getNombre());
-			}
+			Stream<Alumno> al = alumnos.stream().filter(e -> e.getRut().equals(r));
+			System.out.println(al.map(e -> e.getMaterias()).collect(Collectors.toList()));
+			
+
 			System.out.println("Seleccione numero de materia: ");
 			String materia = scanner.nextLine();
-			if (Integer.parseInt(materia) < 1 || Integer.parseInt(materia) > al.getMaterias().size()) {
+			if (Integer.parseInt(materia) < 1 || Integer.parseInt(materia) > 4) {
 				System.out.println("Ingrese nota");
 				String nota = scanner.nextLine();
-				al.getMaterias().get(Integer.parseInt(materia) - 1).getNotas().add(nota);
+				//al.getMaterias().get(Integer.parseInt(materia) - 1).getNotas().add(nota);
 				res = true;
 			} else {
 				System.out.println("Opcion incorrecta");

@@ -17,7 +17,7 @@ public class Alumno {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.direccion = direccion;
-		this.materias = materias;
+		this.materias.addAll(materias);
 	}
 		
 	public Alumno(String rut, String nombre, List<Materia> materias) {
@@ -68,7 +68,7 @@ public class Alumno {
 	}
 
 	public void setMaterias(List<Materia> materias) {
-		this.materias = materias;
+		this.materias.addAll(materias);
 	}
 
 	@Override
